@@ -13,11 +13,8 @@ from opendevin.observation import (
 
 @dataclass
 class State:
-    background_commands_obs: List[CmdOutputObservation]
-    updated_info: List[Tuple[Action, Observation]]
-    task: str
-    iteration: int = 0
     plan: Plan
+    iteration: int = 0
     background_commands_obs: List[CmdOutputObservation] = field(default_factory=list)
     history: List[Tuple[Action, Observation]] = field(default_factory=list)
     updated_info: List[Tuple[Action, Observation]] = field(default_factory=list)

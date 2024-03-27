@@ -18,7 +18,6 @@ from opendevin.observation import (
     NullObservation
 )
 
-
 from .command_manager import CommandManager
 
 def print_with_indent(text: str):
@@ -53,9 +52,10 @@ class AgentController:
         self.state.history.append((action, observation))
         self.state.updated_info.append((action, observation))
 
-    async def start_loop(self, task_instruction: str):
+    async def start_loop(self, task: str):
         finished = False
-        self.state = State(task)
+        plan = Plan(task)
+        self.state = State(plan)
         for i in range(self.max_iterations):
             try:
                 finished = await self.step(i)
