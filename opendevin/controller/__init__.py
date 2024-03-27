@@ -11,6 +11,8 @@ from opendevin.action import (
     FileReadAction,
     FileWriteAction,
     AgentFinishAction,
+    AddSubtaskAction,
+    CloseSubtaskAction
 )
 from opendevin.observation import (
     Observation,
@@ -102,6 +104,10 @@ class AgentController:
             _kwargs["base_path"] = self.workdir
             action = action_cls(**_kwargs)
             print(action, flush=True)
+        if isinstance(action, AddSubtaskAction):
+            self.state.plan.add_subtask(action.parent, action.goal)
+        elif isinstance(action, CloseSubtaskAction):
+            self.state.plan.close_subtask(action.id)
         if action.executable:
             try:
                 observation = action.run(self)
