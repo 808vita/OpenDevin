@@ -2,6 +2,7 @@ import asyncio
 from typing import List, Callable, Tuple
 import traceback
 
+from opendevin.plan import Plan
 from opendevin.state import State
 from opendevin.agent import Agent
 from opendevin.action import (
@@ -43,6 +44,7 @@ class AgentController:
         state = State(
             background_commands_obs=self.command_manager.get_background_obs(),
             updated_info=self.state_updated_info,
+            plan=self.plan,
         )
         self.state_updated_info = []
         return state
@@ -55,6 +57,7 @@ class AgentController:
         self.state_updated_info.append((action, observation))
 
     async def start_loop(self, task_instruction: str):
+        self.plan = Plan(task_instruction)
         finished = False
         self.agent.instruction = task_instruction
         for i in range(self.max_iterations):
